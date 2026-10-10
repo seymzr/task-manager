@@ -1,0 +1,23 @@
+[
+  {
+    "id": "b1a7c9e2-4f3d-4a21-9c8b-1e2f3a4b5c6d",
+    "title": "Buy groceries for the week",
+    "status": "pending",
+    "due_date": "2026-10-14",
+    "created_at": "2026-10-11T09:15:00.000Z"
+  },
+  {
+    "id": "c2b8d0f3-5a4e-4b32-8d9c-2f3a4b5c6d7e",
+    "title": "Call the dentist to book a checkup",
+    "status": "pending",
+    "due_date": null,
+    "created_at": "2026-10-10T17:40:00.000Z"
+  },
+  {
+    "id": "d3c9e1a4-6b5f-4c43-9e0d-3a4b5c6d7e8f",
+    "title": "Finish the quarterly report",
+    "status": "done",
+    "due_date": "2026-10-09",
+    "created_at": "2026-10-08T13:05:00.000Z"
+  }
+]
