@@ -68,7 +68,8 @@ server/data/tasks.json  persisted tasks (seeded)
   `useTasks` optimistic-toggle/rollback logic and the create-form validation;
   next I'd add a Supertest suite for the API validation and CRUD paths.
 - Toast notifications for success feedback (errors currently use an inline banner).
-- Search by title and sort by due date (listed nice-to-haves).
+- **Debounce the search input** — it filters on every keystroke; debouncing (and
+  moving search server-side) would scale better for large task lists.
 - Abort in-flight requests on rapid filter changes; persist the selected filter.
 
 ## Assumptions
