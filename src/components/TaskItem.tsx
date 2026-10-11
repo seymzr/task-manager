@@ -139,7 +139,11 @@ export function TaskItem({ task, saving, onToggleStatus, onEdit, onDelete }: Pro
   }
 
   return (
-    <div className={`${cardClass} flex items-start gap-3 ${saving ? 'opacity-60' : ''}`}>
+    <div
+      className={`${cardClass} flex flex-col items-start gap-3 sm:flex-row sm:items-start ${
+        saving ? 'opacity-60' : ''
+      }`}
+    >
       <div
         role="group"
         aria-label={`Status for "${task.title}"`}
@@ -179,7 +183,7 @@ export function TaskItem({ task, saving, onToggleStatus, onEdit, onDelete }: Pro
         </button>
       </div>
 
-      <div className="flex min-w-0 flex-1 flex-col gap-1">
+      <div className="flex w-full min-w-0 flex-col gap-1 sm:flex-1">
         <span
           className={
             task.status === 'done'
