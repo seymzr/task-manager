@@ -5,6 +5,40 @@ import { FilterBar } from './components/FilterBar'
 import { TaskForm } from './components/TaskForm'
 import { TaskList } from './components/TaskList'
 import { useTasks } from './hooks/useTasks'
+import type { Task } from './types'
+
+type SortKey = 'created_desc' | 'created_asc' | 'due_asc' | 'due_desc'
+
+const SORT_OPTIONS: { key: SortKey; label: string }[] = [
+  { key: 'created_desc', label: 'Newest first' },
+  { key: 'created_asc', label: 'Oldest first' },
+  { key: 'due_asc', label: 'Due date (soonest)' },
+  { key: 'due_desc', label: 'Due date (latest)' },
+]
+
+// Tasks without a due date always sort last, regardless of direction.
+function compareByDue(a: Task, b: Task, direction: 'asc' | 'desc'): number {
+  if (!a.due_date && !b.due_date) return 0
+  if (!a.due_date) return 1
+  if (!b.due_date) return -1
+  const cmp = a.due_date.localeCompare(b.due_date)
+  return direction === 'asc' ? cmp : -cmp
+}
+
+function sortTasks(list: Task[], sort: SortKey): Task[] {
+  const copy = [...list]
+  switch (sort) {
+    case 'created_asc':
+      return copy.sort((a, b) => a.created_at.localeCompare(b.created_at))
+    case 'due_asc':
+      return copy.sort((a, b) => compareByDue(a, b, 'asc'))
+    case 'due_desc':
+      return copy.sort((a, b) => compareByDue(a, b, 'desc'))
+    case 'created_desc':
+    default:
+      return copy.sort((a, b) => b.created_at.localeCompare(a.created_at))
+  }
+}
 
 function App() {
   const {
@@ -24,10 +58,13 @@ function App() {
   } = useTasks()
 
   const [search, setSearch] = useState('')
+  const [sort, setSort] = useState<SortKey>('created_desc')
+
   const query = search.trim().toLowerCase()
-  const visibleTasks = query
+  const matchedTasks = query
     ? tasks.filter((task) => task.title.toLowerCase().includes(query))
     : tasks
+  const visibleTasks = sortTasks(matchedTasks, sort)
 
   return (
     <div className="min-h-screen bg-zinc-950 text-zinc-100">
@@ -48,9 +85,21 @@ function App() {
             aria-label="Search tasks by title"
             className="w-full rounded-md border border-zinc-700 bg-zinc-900 px-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-500 focus-visible:border-indigo-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/40"
           />
-          <div className="flex items-center justify-between gap-4">
+          <div className="flex flex-wrap items-center gap-3">
             <FilterBar value={filter} onChange={setFilter} />
-            <span className="text-sm text-zinc-400">
+            <select
+              value={sort}
+              onChange={(e) => setSort(e.target.value as SortKey)}
+              aria-label="Sort tasks"
+              className="rounded-md border border-zinc-700 bg-zinc-900 px-3 py-1.5 text-sm text-zinc-100 focus-visible:border-indigo-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/40"
+            >
+              {SORT_OPTIONS.map((option) => (
+                <option key={option.key} value={option.key}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+            <span className="ml-auto text-sm text-zinc-400">
               {visibleTasks.length} {visibleTasks.length === 1 ? 'task' : 'tasks'}
             </span>
           </div>
