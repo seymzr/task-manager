@@ -31,6 +31,18 @@ Then open http://localhost:5173.
 npm test
 ```
 
+### Trying the error states
+
+To see how the UI handles API failures, stop the API server (press `Ctrl+C` in
+the API terminal) while the app is open, then:
+
+- **Reload** the page → the error banner appears with a **Retry** button.
+- **Toggle a task's status** → it flips optimistically, then rolls back when the
+  request fails, and the error banner is shown.
+
+The app never crashes on failure. Restart the API (`npm run dev` in `server`) and
+press **Retry** (or reload) to recover.
+
 ## Technology choices
 
 - **React 18 + TypeScript (Vite).** Vite for a fast dev server; TypeScript so the
